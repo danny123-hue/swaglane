@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swaglane - Modern Clothing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 111, 97, 0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #ff6f61;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .featured-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 111, 97, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .category-card-content {
+            padding: 1.5rem;
+        }
+
+        /* Products Page */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            border: 1px solid rgba(255, 111, 97, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6f61;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .add-to-cart:hover {
+            transform: scale(1.02);
+        }
+
+        /* Product Details */
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .product-detail img {
+            width: 100%;
+            border-radius: 15px;
+        }
+
+        .product-detail-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .product-detail-info .price {
+            font-size: 2rem;
+            color: #ff6f61;
+            margin-bottom: 1rem;
+        }
+
+        .size-selector {
+            margin: 2rem 0;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .size-option {
+            padding: 10px 15px;
+            border: 2px solid rgba(255, 111, 97, 0.3);
+            background: transparent;
+            color: #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .size-option:hover, .size-option.selected {
+            border-color: #ff6f61;
+            background: rgba(255, 111, 97, 0.2);
+        }
+
+        /* Cart */
+        .cart-items {
+            margin: 2rem 0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 111, 97, 0.2);
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 1rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .cart-item-price {
+            color: #ff6f61;
+            font-weight: bold;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0 1rem;
+        }
+
+        .quantity-btn {
+            background: linear-gradient(45deg, #ff6f61, #ffb347);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 111, 97, 0.2);
+        }
+
+        .cart-total h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .total-amount {
+            font-size: 2rem;
+            color: #ff6f61;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 0;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-detail {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content">
+    <header>
+        <nav class="container">
+            <div class="logo">Swaglane</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')" class="active">Home</a></li>
+                <li><a href="#" onclick="showPage('products')">Products</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+            </ul>
+            <div class="cart-icon" onclick="showPage('cart')">
+                🛒 Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero fade-in">
+                <h1>Swaglane Collection</h1>
+                <p>Discover the latest trends in fashion with our curated collection</p>
+                <button class="btn-primary" onclick="showPage('products')">Shop Now</button>
+            </div>
+
+            <div class="featured-categories">
+                <div class="category-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Casual Wear">
+                    <div class="category-card-content">
+                        <h3>Casual Wear</h3>
+                        <p>Comfortable and stylish everyday clothing</p>
+                    </div>
+                </div>
+                <div class="category-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Formal Wear">
+                    <div class="category-card-content">
+                        <h3>Formal Wear</h3>
+                        <p>Professional attire for every occasion</p>
+                    </div>
+                </div>
+                <div class="category-card fade-in">
+                    <img src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Accessories">
+                    <div class="category-card-content">
+                        <h3>Accessories</h3>
+                        <p>Complete your look with our accessories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Page -->
+        <div id="products" class="page">
+            <h1 style="text-align: center; margin: 2rem 0; color: #fff;">Our Products</h1>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Product Detail Page -->
+        <div id="productDetail" class="page">
+            <div class="product-detail" id="productDetailContent">
+                <!-- Product detail will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Cart Page -->
+        <div id="cart" class="page">
+            <h1 style="text-align: center; margin: 2rem 0; color: #fff;">Shopping Cart</h1>
+            <div id="cartContent">
+                <!-- Cart content will be loaded here -->
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div style="text-align: center; padding: 4rem 0;">
+                <h1 style="color: #fff; margin-bottom: 2rem;">About Swaglane</h1>
+                <div style="max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                    <p style="margin-bottom: 2rem;">Swaglane is your destination for contemporary fashion that blends comfort with cutting-edge style. We curate collections that speak to the modern individual who values both quality and aesthetic appeal.</p>
+                    <p style="margin-bottom: 2rem;">Our mission is to make high-quality, stylish clothing accessible to everyone, while maintaining sustainable practices and ethical manufacturing standards.</p>
+                    <p>Join the Swaglane community and express your unique style with confidence.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+
+
+    <style>
+    /* Blur background when popup is visible */
+    .blurred {
+      filter: blur(5px); /* More blur */
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Overlay popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    .popup {
+      background: white;
+      padding: 40px 60px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0px 6px 25px rgba(0,0,0,0.4);
+      cursor: pointer;
+      max-width: 500px;
+      width: 80%;
+    }
+
+    .popup h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      padding: 15px 25px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      background: #ff6f61;
+      color: white;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .popup button:hover {
+      background: #ff6f61;
+    }
+  </style>
+    
+    
+ 
+  <!-- Popup Overlay -->
+  <div id="overlay" class="overlay">
+    <div class="popup">
+      <h2 style="color:black">Click to Continue</h2>
+      <button>Open Site</button>
+    </div>
+  </div>
+
+<script>
+  // Initially hide the overlay
+  document.getElementById("overlay").style.display = "none";
+
+  // Show popup after 2 seconds (2000ms)
+  setTimeout(function() {
+    document.getElementById("overlay").style.display = "flex";
+    document.getElementById("main-content").classList.add("blurred");
+  }, 0000); // Change 2000 to your desired delay in ms
+
+  // Redirect function
+  function redirect() {
+    window.location.href = "#"; // Change to your target URL
+  }
+
+  // Click anywhere in overlay or on button
+  document.getElementById("overlay").addEventListener("click", redirect);
+  document.querySelector(".popup button").addEventListener("click", redirect);
+</script>
+
+
+
+
+    <!-- <script>
+  let lastX = null;
+  let lastY = null;
+
+  function redirectOnMouseMove(event) {
+    if (lastX === null && lastY === null) {
+      // Just record initial position, no redirect yet
+      lastX = event.clientX;
+      lastY = event.clientY;
+      return;
+    }
+
+    // Check if mouse actually moved
+    if (event.clientX !== lastX || event.clientY !== lastY) {
+      window.location.href = "#"; // replace with your target URL
+      // Remove event listener after redirect
+      document.removeEventListener('mousemove', redirectOnMouseMove);
+    }
+  }
+
+  document.addEventListener('mousemove', redirectOnMouseMove);
+</script> -->
+
+
+
+    <script>
+        // Product data
+        const products = [
+            {
+                id: 1,
+                name: "Premium Cotton T-Shirt",
+                price: 29.99,
+                image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Soft, breathable cotton t-shirt perfect for everyday wear. Made from 100% organic cotton with a comfortable fit.",
+                sizes: ["S", "M", "L", "XL"]
+            },
+            {
+                id: 2,
+                name: "Slim Fit Jeans",
+                price: 79.99,
+                image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Classic slim fit jeans with stretch fabric for ultimate comfort. Versatile style that pairs well with any top.",
+                sizes: ["28", "30", "32", "34", "36"]
+            },
+            {
+                id: 3,
+                name: "Casual Hoodie",
+                price: 54.99,
+                image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Cozy fleece hoodie with kangaroo pocket. Perfect for layering or wearing on its own during cooler days.",
+                sizes: ["S", "M", "L", "XL", "XXL"]
+            },
+            {
+                id: 4,
+                name: "Summer Dress",
+                price: 45.99,
+                image: "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Light and airy summer dress with floral patterns. Made from breathable fabric ideal for warm weather.",
+                sizes: ["XS", "S", "M", "L", "XL"]
+            },
+            {
+                id: 5,
+                name: "Formal Blazer",
+                price: 129.99,
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Sophisticated blazer perfect for business meetings and formal events. Tailored fit with premium fabric.",
+                sizes: ["S", "M", "L", "XL"]
+            },
+            {
+                id: 6,
+                name: "Sneakers",
+                price: 89.99,
+                image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                description: "Comfortable running sneakers with modern design. Breathable mesh upper with cushioned sole.",
+                sizes: ["7", "8", "9", "10", "11", "12"]
+            }
+        ];
+
+        // Cart data
+        let cart = [];
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // Update nav active state
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            if (pageId !== 'cart' && pageId !== 'productDetail') {
+                document.querySelector(`[onclick="showPage('${pageId}')"]`).classList.add('active');
+            }
+
+            // Load page content
+            if (pageId === 'products') {
+                loadProducts();
+            } else if (pageId === 'cart') {
+                loadCart();
+            }
+        }
+
+        // Load products
+        function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card fade-in">
+                    <img src="${product.image}" alt="${product.name}" onclick="showProductDetail(${product.id})">
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">$${product.price}</div>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show product detail
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            const content = document.getElementById('productDetailContent');
+            
+            content.innerHTML = `
+                <div>
+                    <img src="${product.image}" alt="${product.name}">
+                </div>
+                <div class="product-detail-info">
+                    <h1>${product.name}</h1>
+                    <div class="price">$${product.price}</div>
+                    <p style="line-height: 1.6; margin-bottom: 2rem; opacity: 0.9;">${product.description}</p>
+                    
+                    <div class="size-selector">
+                        <h3 style="color: #fff; margin-bottom: 1rem;">Select Size:</h3>
+                        <div class="size-options">
+                            ${product.sizes.map(size => `
+                                <button class="size-option" onclick="selectSize(this)">${size}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="addToCart(${product.id})" style="margin-top: 2rem; width: 100%;">
+                        Add to Cart - $${product.price}
+                    </button>
+                    
+                    <button onclick="showPage('products')" style="background: transparent; color: #ff6f61; border: 2px solid #ff6f61; padding: 12px 24px; border-radius: 25px; margin-top: 1rem; width: 100%; cursor: pointer;">
+                        ← Back to Products
+                    </button>
+                </div>
+            `;
+            
+            showPage('productDetail');
+        }
+
+        // Select size
+        function selectSize(button) {
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            button.classList.add('selected');
+        }
+
+        // Add to cart
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const selectedSize = document.querySelector('.size-option.selected');
+            const size = selectedSize ? selectedSize.textContent : product.sizes[0];
+            
+            const existingItem = cart.find(item => item.id === productId && item.size === size);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    size: size,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            
+            // Show success message
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Added!';
+            button.style.background = '#28a745';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'linear-gradient(45deg, #ff6f61, #ffb347)';
+            }, 1000);
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Load cart
+        function loadCart() {
+            const cartContent = document.getElementById('cartContent');
+            
+            if (cart.length === 0) {
+                cartContent.innerHTML = `
+                    <div class="empty-cart">
+                        <h2>Your cart is empty</h2>
+                        <p>Add some products to get started!</p>
+                        <button class="btn-primary" onclick="showPage('products')" style="margin-top: 2rem;">Continue Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            cartContent.innerHTML = `
+                <div class="cart-items">
+                    ${cart.map((item, index) => `
+                        <div class="cart-item fade-in">
+                            <img src="${item.image}" alt="${item.name}">
+                            <div class="cart-item-info">
+                                <div class="cart-item-title">${item.name}</div>
+                                <div>Size: ${item.size}</div>
+                                <div class="cart-item-price">$${item.price}</div>
+                            </div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span style="color: #fff; font-weight: bold;">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="cart-total">
+                    <h3>Order Summary</h3>
+                    <div class="total-amount">$${total.toFixed(2)}</div>
+                    <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                </div>
+            `;
+        }
+
+        // Update quantity
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartCount();
+            loadCart();
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            loadCart();
+        }
+
+        // Checkout
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            alert('Thank you for your order! Your items will be delivered soon.');
+            cart = [];
+            updateCartCount();
+            loadCart();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProducts();
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
